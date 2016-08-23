@@ -9,8 +9,8 @@ Meteor.pagerClient = function (collection, subscriptionName, filters, options, s
 		infiniteScroll: true
 	}, settings||{});
 
-	this._metadataCollection = new Meteor.Collection('pagerMetadata');
-	this._metadataCollectionHandler = Meteor.subscribe('pagerMetadata');
+	this._metadataCollectionHandler = Meteor.subscribe(metadataSubscriptionName);
+	this._metadataCollection = metadataCollection;
 
 	this._name = subscriptionName;
 	options.limit = options.limit || 0;
@@ -45,7 +45,6 @@ Meteor.pagerClient = function (collection, subscriptionName, filters, options, s
 				});
 			}
 			self._isLoading.set(false);
-		
 		}
 	});
 

@@ -11,10 +11,12 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
+  api.use('reywood:publish-composite@1.4.2', 'server');
+  api.imply('reywood:publish-composite');
   api.versionsFrom('1.3.4.4');
   api.addFiles(['server.js'], 'server');
   api.addFiles(['client.js'], 'client');
-  //api.addFiles(['view.html'], 'client');
+  api.addFiles(['both.js']);
   //api.addFiles(['view.js'], 'client');
 });
 

@@ -1,27 +1,37 @@
-var metadataSubscriptionName = 'pagerMetadata';
-Meteor.pagerServer = function (collection, subscriptionName) {
+Meteor.pagerServer = function (subscriptionName, cursorFunction, composite) {
 	var self = this;
-	this.collection = collection;
 	this.subscriptionName = subscriptionName;
+  
+  if (composite) {
+    Meteor.publishComposite(subscriptionName, function(filter, options){
+      var cursor = cursorFunction(filter, options);
 
-	Meteor.publish(subscriptionName, function(filter, options){
-		var cursor = collection.find(filter, options);
+      Metadata.add({
+        connectionId: this.connection.id,
+        name: subscriptionName,
+        finalCursor: cursor['find']()
+      });
+      this.ready();
 
-		Metadata.add({
-			connectionId: this.connection.id,
-			name: subscriptionName,
-			finalCursor: cursor
-		});
-		this.ready();
+      return cursor;
+    });
+  } else {
 
-		return cursor;
-	});
+    Meteor.publish(subscriptionName, function(filter, options){
+      var cursor = cursorFunction(filter, options);
 
+      Metadata.add({
+        connectionId: this.connection.id,
+        name: subscriptionName,
+        finalCursor: cursor
+      });
+      this.ready();
 
-	//publish pageSize and cursor's total count, etc
+      return cursor;
+    });
+  }
+	
 	Meteor.publish(metadataSubscriptionName, function () {
-	  //if (!this.userId) return false;
-
 	  var self = this;
 
 	  Metadata.setAsPublished(self);
