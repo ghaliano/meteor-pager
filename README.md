@@ -1,4 +1,4 @@
-#Meteor pager (Under develepement not yet finished)
+#Meteor pager
 Widely inspired from https://github.com/Exartu/Exartu-Pagination and https://github.com/meteor-utilities/SmartQuery
 Publishing counts with additional subscription thanks to a metadata collection unstead off Counts.publish
 
@@ -15,7 +15,7 @@ Security
 - [ ] Using simple schema
 
 
-- [ ] Support for publishComposite
+- [x] Support for publishComposite
 
 Examples
 
