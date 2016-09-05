@@ -6,7 +6,8 @@ Meteor.pagerClient = function (collection, subscriptionName, filters, options, s
 	var self = this;
 	this._settings = _.extend({
 		fireAt: 100,
-		infiniteScroll: true
+		infiniteScroll: true,
+		invertScroll: false
 	}, settings||{});
 
 	this._metadataCollectionHandler = Meteor.subscribe(metadataSubscriptionName);
@@ -37,12 +38,15 @@ Meteor.pagerClient = function (collection, subscriptionName, filters, options, s
 		if (self._handler.ready() && self._metadataCollectionHandler.ready()){
 			var metadata = self._metadataCollection.findOne(self._name);
 			if (metadata){
-				var currentCount = self._collection.find().count();
+				var currentCount = self._collection.find(self._filters.get(), self._options.get()).count();
+				
 				self._resultMetadata.set({
 					count: metadata.count,
 					hasMore: metadata.count>currentCount,
 					pagesCount: Math.ceil(metadata.count/self.util.getLimit())
 				});
+
+				console.log(self._resultMetadata.get());
 			}
 			self._isLoading.set(false);
 		}

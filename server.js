@@ -4,6 +4,9 @@ Meteor.pagerServer = function (subscriptionName, cursorFunction, composite) {
   
   if (composite) {
     Meteor.publishComposite(subscriptionName, function(filter, options){
+      check(filter, Object);
+      check(options, Object);
+
       var cursor = cursorFunction(filter, options);
 
       Metadata.add({
@@ -18,6 +21,9 @@ Meteor.pagerServer = function (subscriptionName, cursorFunction, composite) {
   } else {
 
     Meteor.publish(subscriptionName, function(filter, options){
+      check(filter, Object);
+      check(options, Object);
+
       var cursor = cursorFunction(filter, options);
 
       Metadata.add({
